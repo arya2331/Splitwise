@@ -1,0 +1,52 @@
+pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
+contract splitwise{
+    
+    struct Person{
+        string name;
+        uint owed;
+        address id;
+        uint borrowed;
+        uint[] account;
+     }
+     
+     Person[] directory;
+     mapping(address=>Person) persons;
+     
+     function addperson(string memory name, address _id) public {
+         uint[] memory newarray;
+         for(uint i=0;i<=directory.length;i++){
+             
+             newarray[i] = 0;
+         }
+         directory.push(Person(name, 0, _id, 0,newarray ));
+         persons[_id] = Person(name, 0, _id, 0,newarray );
+     }
+     function split(uint total, uint[] memory split, address[] memory entities )private{
+         bytes32 transaction_id = keccak256(abi.encodePacked(total, split, entities));
+        //  require((authorize(fromid)==1)&& (authorize(toid)==1));
+        for(uint i=0;i<=entities.length;i++){
+            Person memory person = persons[entities[i]];
+            
+            
+        }
+        
+     }
+     function paidbyone(uint256 amount, address payer, address[] memory entities) public{
+         uint256 _split = amount/entities.length;
+         uint256 l = entities.length - 1;
+         uint256 owed = split * l;
+         uint[] memory split;
+         for(uint i=0;i<=entities.length;i++){
+             
+            Person memory person = persons[entities[i]];
+            if(payer==person.id){
+                split[i] = owed;
+            }
+            else{
+                split[i] = -split;
+            }
+         }
+         
+         
+     }
